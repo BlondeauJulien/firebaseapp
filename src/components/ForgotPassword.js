@@ -1,29 +1,28 @@
 import { Fragment, useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-const Login = () => {
+const ForgotPassword = () => {
   const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login } = useAuth();
-  const history = useHistory();
+  const { resetPassword } = useAuth();
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const email = emailRef.current.value;
-    const password = passwordRef.current.value;
 
     try {
+      setMessage('')
       setError('');
       setLoading(true);
-      await login(email, password);
-      return history.push('/');
+      await resetPassword(email);
+      setMessage('Check your inbox for further instruction')
     } catch {
-      setError('Failed to sign In');
+      setError('Failed to reset password');
     }
 
     setLoading(false);
@@ -33,8 +32,9 @@ const Login = () => {
     <Fragment>
       <Card>
         <Card.Body>
-          <h2 className="text-center mb-4">Log In</h2>
+          <h2 className="text-center mb-4">Password Reset</h2>
           {error && <Alert variant="danger">{error}</Alert>}
+          {message && <Alert variant="success">{message}</Alert>}
 
           <Form onSubmit={handleSubmit}>
 
@@ -43,16 +43,11 @@ const Login = () => {
               <Form.Control type="email" ref={emailRef} required></Form.Control>
             </Form.Group>
 
-            <Form.Group id="password">
-              <Form.Label className="Label">Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef} required></Form.Control>
-            </Form.Group>
-
-            <Button disabled={loading} className="w-100" type="submit">Login In</Button>
+            <Button disabled={loading} className="w-100" type="submit">Reset Password</Button>
 
           </Form>
           <div className="w-100 text-center mt-3">
-            <Link to="/forgot-password">Forgot password</Link>
+            <Link to="/login">Login</Link>
           </div>
         </Card.Body>
       </Card>
@@ -65,4 +60,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ForgotPassword;
