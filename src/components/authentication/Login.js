@@ -1,7 +1,8 @@
-import { Fragment, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
+import CenteredContainer from './CenteredContainer';
 
 const Login = () => {
   const emailRef = useRef();
@@ -30,7 +31,7 @@ const Login = () => {
   }
 
   return (
-    <Fragment>
+    <CenteredContainer>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Log In</h2>
@@ -61,7 +62,7 @@ const Login = () => {
         No account yet? <Link to="/signup">Sign Up</Link>
       </div>
 
-    </Fragment>
+    </CenteredContainer>
   )
 }
 
