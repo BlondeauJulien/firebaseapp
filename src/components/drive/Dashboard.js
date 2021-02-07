@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
+import  { Fragment } from 'react';
 import { Container } from 'react-bootstrap';
+import AddFolderButton from './AddFolderButton';
 
 import Navbar from './Navbar';
 
@@ -8,7 +9,7 @@ const Dashboard = () => {
     <Fragment>
       <Navbar />
       <Container fluid>
-        Content
+        <AddFolderButton></AddFolderButton>
       </Container>
     </Fragment>
   )
