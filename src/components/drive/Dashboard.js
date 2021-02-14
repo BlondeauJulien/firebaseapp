@@ -1,16 +1,18 @@
 import  { Fragment } from 'react';
 import { Container } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
-import { useFolder } from '../hooks/useFolder';
+import { useFolder } from '../../hooks/useFolder';
 
 import Folder from './Folder';
 import AddFolderButton from './AddFolderButton';
 import Navbar from './Navbar';
+import FolderBreadCrumbs from './FolderBreadCrumbs';
 
 const Dashboard = () => {
   const { folderId } = useParams();
-  const { folder, childFolders } = useFolder(folderId);
+  const { state = {} } = useLocation();
+  const { folder, childFolders } = useFolder(folderId, state.folder);
 
 
   return (
@@ -18,7 +20,7 @@ const Dashboard = () => {
       <Navbar />
       <Container fluid>
         <div className="d-flex align-items-center">
-
+          <FolderBreadCrumbs currentFolder={folder}></FolderBreadCrumbs>
           <AddFolderButton currentFolder={folder}></AddFolderButton>  
         </div>
         {childFolders.length > 0 && (

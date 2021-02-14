@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useReducer } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import {database } from '../../firebase';
+import { useAuth } from "../contexts/AuthContext";
+import {database } from '../firebase';
 
 const ACTIONS = {
   SELECT_FOLDER: 'select-folder',
@@ -9,7 +9,7 @@ const ACTIONS = {
   SET_CHILD_FOLDERS: 'set-child-folder'
 }
 
-const ROOT_FOLDER = {
+export const ROOT_FOLDER = {
   name: 'Root',
   id: null,
   path: []
@@ -91,7 +91,7 @@ export function useFolder(folderId = null, folder = null) {
     return  database.folders
     .where('parentId', '==', folderId)
     .where('userId', '==', currentUser.uid)
-    //.orderBy('createdAt')
+    .orderBy('createdAt')
     .onSnapshot(snapshot => {
       dispatch({
         type: ACTIONS.SET_CHILD_FOLDERS,
