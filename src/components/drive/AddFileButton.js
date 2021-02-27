@@ -46,10 +46,36 @@ const AddFileButton = ({ currentFolder }) => {
     .put(file);
 
     uploadTask.on('state_changed', snapshot => {
+      const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+
+      setUploadingFiles(previousUploadingFiles => {
+        return previousUploadingFiles.map(uploadFile => {
+          if(uploadFile.id === id) {
+            return {...uploadFile, progress};
+          }
+
+          return uploadFile;
+        })
+      })
+    }, () => {
+      setUploadingFiles(previousUploadingFiles => {
+        return previousUploadingFiles.map(uploadFile => {
+          if(uploadFile.id === id) {
+            return { ...uploadFile, error: true};
+
+          }
+
+          return uploadFile;
+        });
+      });
 
     }, () => {
+      setUploadingFiles(previousUploadingFiles => {
+        return previousUploadingFiles.filter(uploadFile => {
+          return uploadFile.id !== id;
+        });
+      });
 
-    }, () => {
       uploadTask.snapshot.ref.getDownloadURL().then(url => {
         database.files.add({
           url: url,
@@ -86,8 +112,17 @@ const AddFileButton = ({ currentFolder }) => {
           >
             {uploadingFiles.map(file => {
               return (
-                <Toast key={file.id}>
-                  <Toast.Header className="test-truncate w-100 d-block">
+                <Toast key={file.id} onClose={() => {
+                  setUploadingFiles(previousUploadingFiles => {
+                    return previousUploadingFiles.filter(uploadFile => {
+                      return uploadFile.id !== file.id;
+                    });
+                  });
+                }}>
+                  <Toast.Header 
+                    closeButton={file.error}
+                    className="test-truncate w-100 d-block"
+                  >
                     { file.name }
                   </Toast.Header>
                   <Toast.Body>
